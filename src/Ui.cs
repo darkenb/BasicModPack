@@ -146,8 +146,11 @@ namespace BasicModPack
 
         public static float TextHeight(Text t, float width)
         {
-            var settings = t.GetGenerationSettings(new Vector2(width, 0f));
-            settings.scaleFactor = 1f;
+            // Lines break at the game's real UI scale (glyph widths differ from scale 1, so a nearly full line may wrap only
+            // on screen); the window is still inactive here, so the scale comes from the game's own canvas. 6 units of slack.
+            var canvas = UIRoot.instance.uiGame.GetComponentInParent<Canvas>();
+            var settings = t.GetGenerationSettings(new Vector2(width - 6f, 0f));
+            settings.scaleFactor = canvas != null ? canvas.scaleFactor : 1f;
             settings.generateOutOfBounds = true;
             var gen = new TextGenerator();
             gen.Populate(t.text, settings);
