@@ -19,6 +19,7 @@ All of them work on the buildings within your mecha's construction range, so mod
 - **Power warning**: a message and a sound when a power network on the planet you are on meets less than 90% of its demand. It warns again only after the network has recovered to 95%.
 - **Station stock warning**: names the interstellar station that has run out of vessels, or of warpers while it still has vessels. Checked every five seconds on all planets; each station is reported once until it is restocked. Stations that never had vessels are reported once when a save is loaded.
 - **Build counter**: while building, a line beside the cursor shows how many of the held building you carry; while dragging a belt line, also how many pieces it takes and how many you are short.
+- **Best chain recipe**: when the replicator is missing an input, it makes it along the way (chain production) with the one recipe the game links to that item. Switched ON, that recipe is instead the one whose inputs you carry enough of to make the most of the item (inventory, delivery slots and what the queue has left over), chosen among every unlocked recipe that makes it and can be made in the replicator: the game's, and those of any mod that adds recipes, BUG mods included. When you carry the inputs of none of them, the game's own recipe is kept. Dark Fog drops are only spent on basic items (raw resources and materials such as ingots, graphite or refined liquids): a recipe that turns them into a finished product, such as Dyson sphere parts (frame material and solar sails included, whatever type a mod gives them), fuel rods, ammunition, combat units or buildings, is never chosen. The same rule picks the recipes of that recipe's inputs, down the chain. Each choice depends only on what you carry, so it changes only when your stock does. Items an order needs are taken from the inventory when the order is placed, as the game always does, so they never count for another order. The choice is renewed as your inventory changes and stays fixed while one order is planned, so the replicator's counts, its red marks and the queue always agree. A recipe that uses the item itself is never chosen. Switched OFF, every item gets back its own recipe at once.
 
 ## Configuration
 
@@ -26,7 +27,7 @@ All of them work on the buildings within your mecha's construction range, so mod
 
 ## Compatibility
 
-No other mods are needed. The pack adds no items, recipes or buildings, so it can be removed at any time without harming saves.
+No other mods are needed. The pack adds no items, recipes or buildings, so it can be removed at any time without harming saves. Best chain recipe changes only which recipe the replicator uses for an input, never a recipe itself, and is not stored in the save.
 
 ## Building from source
 

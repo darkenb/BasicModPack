@@ -6,8 +6,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.1.0.0")]
+[assembly: AssemblyFileVersion("1.1.0.0")]
 
 namespace BasicModPack
 {
@@ -25,7 +25,7 @@ namespace BasicModPack
         public bool OneTime => Enabled == null;
     }
 
-    [BepInPlugin(Guid, "BUG_BasicModPack", "1.0.0")]
+    [BepInPlugin(Guid, "BUG_BasicModPack", "1.1.0")]
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "bug.dsp.basicmodpack";
@@ -37,8 +37,11 @@ namespace BasicModPack
         static readonly Dictionary<Feature, UIButton> switches = new Dictionary<Feature, UIButton>(), applies = new Dictionary<Feature, UIButton>();
         static readonly Dictionary<Language, UIButton> languageButtons = new Dictionary<Language, UIButton>();
 
+        public static BepInEx.Logging.ManualLogSource Log;
+
         void Awake()
         {
+            Log = Logger;
             hotkey = Config.Bind("General", "Hotkey", new KeyboardShortcut(KeyCode.B, KeyCode.LeftControl, KeyCode.LeftShift), "Opens and closes the mod pack panel.");
             language = Config.Bind("General", "Language", Language.English, "Language of the pack's texts; also chosen on the panel.");
             Lang.Current = language.Value;
@@ -67,6 +70,8 @@ namespace BasicModPack
             PowerAlert.Enabled = Switch("Power warning", "A message and a sound when the planet you are on gets less than 90% of the power it needs.").Enabled;
             StationAlert.Enabled = Switch("Station stock warning", "Names the interstellar station that has run out of vessels, or of warpers while it has vessels.").Enabled;
             BeltCounter.Enabled = Switch("Build counter", "Beside the cursor while building: how many you carry, and how many a dragged belt line takes.").Enabled;
+            ChainRecipes.Enabled = Switch("Best chain recipe", "When the replicator makes a missing input along the way, it uses the recipe that can make the most of it from your inventory, among every recipe that makes it, other mods' included.").Enabled;
+            ChainRecipes.Apply(new HarmonyLib.Harmony(Guid));
         }
 
         // A one-time action: Run only.
@@ -89,6 +94,7 @@ namespace BasicModPack
 
         void Update()
         {
+            ChainRecipes.Tick();  // also in the menu: switched off, the recipes go back at once
             if (!InGame || GameMain.isPaused || !UIRoot.instance.uiGame.active)
             {
                 if (win != null) win.SetActive(false);

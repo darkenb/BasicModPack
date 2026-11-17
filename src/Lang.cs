@@ -95,6 +95,12 @@ namespace BasicModPack
                 "建造时在光标旁显示：携带数量，以及拖动的传送带需要多少。",
                 "İnşa ederken imlecin yanında: kaç tane taşıdığın ve sürüklenen bant hattının kaç parça tuttuğu.",
             },
+            ["Best chain recipe"] = new[] { "最优连锁配方", "En verimli zincir tarifi" },
+            ["When the replicator makes a missing input along the way, it uses the recipe that can make the most of it from your inventory, among every recipe that makes it, other mods' included."] = new[]
+            {
+                "复制器在连锁制造缺少的原料时，从所有能制造该原料的配方（包括其他模组的配方）中，使用用背包物品能制造最多的配方。",
+                "Çoğaltıcı eksik bir malzemeyi zincirle üretirken, onu yapan tüm tarifler arasından (diğer modlarınkiler dahil) envanterinle en çok üretebilen tarifi kullanır.",
+            },
 
             // Results and messages
             ["Land on a planet first."] = new[] { "请先登陆星球。", "Önce bir gezegene in." },

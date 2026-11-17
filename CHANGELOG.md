@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+- New switch **Best chain recipe** (Always on, ON by default): when the replicator makes a missing input along the way, it uses the recipe that can make the most of it from what you carry, among every recipe that makes it, other mods' included. Dark Fog drops are spent on basic materials only, never on finished products.
+
 ## 1.0.0
 
 - First release: pack panel (Ctrl+Shift+B) in two parts.
