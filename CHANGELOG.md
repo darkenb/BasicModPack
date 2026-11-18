@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+
+- Best chain recipe: inputs the replicator makes on the way now count when recipes are compared. Enriched stone bricks are chosen when you carry stone that can be crushed into dust, not only when you carry the dust itself.
+- Storage limit in range: the slot box no longer shows the name of the last opened station.
+
 ## 1.1.0
 
 - New switch **Best chain recipe** (Always on, ON by default): when the replicator makes a missing input along the way, it uses the recipe that can make the most of it from what you carry, among every recipe that makes it, other mods' included. Dark Fog drops are spent on basic materials only, never on finished products.

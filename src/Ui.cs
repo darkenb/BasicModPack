@@ -78,6 +78,8 @@ namespace BasicModPack
             foreach (var b in input.GetComponentsInChildren<UIButton>(true)) Object.DestroyImmediate(b);
             input.transition = Selectable.Transition.None;
             foreach (var img in input.GetComponentsInChildren<Image>(true)) img.color = Color.clear;
+            // The station window writes the open station's name into its field's placeholder; the copy kept it and showed it.
+            if (input.placeholder is Text hint) hint.text = "";
             input.onEndEdit = new InputField.EndEditEvent();
             input.onValueChanged = new InputField.OnChangeEvent();
             input.characterLimit = limit;
