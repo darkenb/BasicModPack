@@ -6,8 +6,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-[assembly: AssemblyVersion("1.1.1.0")]
-[assembly: AssemblyFileVersion("1.1.1.0")]
+[assembly: AssemblyVersion("1.1.2.0")]
+[assembly: AssemblyFileVersion("1.1.2.0")]
 
 namespace BasicModPack
 {
@@ -25,7 +25,7 @@ namespace BasicModPack
         public bool OneTime => Enabled == null;
     }
 
-    [BepInPlugin(Guid, "BUG_BasicModPack", "1.1.1")]
+    [BepInPlugin(Guid, "BUG_BasicModPack", "1.1.2")]
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "bug.dsp.basicmodpack";

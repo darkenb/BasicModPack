@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+
+- Best chain recipe: an input could be given a recipe that needs an item made from that input, for example tar from coal and hydrogen while the hydrogen was made from tar. The replicator could then not make the input at all: with GenesisBook, deuterium for plasma capsules showed 0 although it could be made from crude oil. Such loops are no longer chosen.
+
 ## 1.1.1
 
 - Best chain recipe: inputs the replicator makes on the way now count when recipes are compared. Enriched stone bricks are chosen when you carry stone that can be crushed into dust, not only when you carry the dust itself.

@@ -11,8 +11,9 @@ namespace BasicModPack
     // `handcraft`. With this switch on, an item's handcraft becomes, among every unlocked handcraftable recipe that makes it
     // (the game's and any mod's, read live from the recipe table), the one that can make the most from what you carry,
     // counting inputs the chain makes on the way (Obtainable).
-    // A score depends on what you carry only, never on other items' choices, so recipes that feed each other cannot flip
-    // back and forth. The choice is made before the replicator plans a recipe and stays fixed while it plans, so the check
+    // A score depends on what you carry, on the items above it in the chain (never made from, or the planner loops) and on
+    // the choices made earlier in the same pass, in a fixed order, so recipes that feed each other cannot flip back and
+    // forth (a tie keeps the current one). The choice is made before the replicator plans a recipe and stays fixed while it plans, so the check
     // and the queued tasks always agree. Switched off, every item gets back the recipe it had.
     public static class ChainRecipes
     {
@@ -23,8 +24,6 @@ namespace BasicModPack
         static readonly Dictionary<int, Swap> swaps = new Dictionary<int, Swap>();
         static readonly Dictionary<int, int> chosenIn = new Dictionary<int, int>();  // item -> pass of its last choice
         static readonly Dictionary<int, long> have = new Dictionary<int, long>();   // what the replicator can draw on
-        static readonly Dictionary<int, long> value = new Dictionary<int, long>();  // item -> Obtainable, this pass
-        static readonly HashSet<int> path = new HashSet<int>();
         static Dictionary<int, List<RecipeProto>> makers;
         static RecipeProto[] indexed;
         static int depth, pass, passFrame = int.MinValue;
@@ -72,16 +71,17 @@ namespace BasicModPack
                 pass++;
                 passFrame = Time.frameCount;
                 Carried(forge);
-                value.Clear();
             }
             var seen = new HashSet<int>();
-            foreach (int item in recipe.Items) Visit(item, seen, 0);
+            var above = new List<int>();
+            foreach (int item in recipe.Items) Visit(item, seen, above);
         }
 
         // The item's recipe first, then the inputs of that recipe: only the recipes the chain will use are walked.
-        static void Visit(int item, HashSet<int> seen, int level)
+        // above: the items whose chosen recipes lead down to this one.
+        static void Visit(int item, HashSet<int> seen, List<int> above)
         {
-            if (level > 20 || !seen.Add(item)) return;
+            if (above.Count > 20 || !seen.Add(item)) return;
             var proto = LDB.items.Select(item);
             if (proto == null) return;
             if (!chosenIn.TryGetValue(item, out int p) || p != pass)
@@ -92,14 +92,11 @@ namespace BasicModPack
                 else
                 {
                     var original = swaps.TryGetValue(item, out var s) && proto.handcraft == s.Set ? s.Original : proto.handcraft;
-                    var scores = new long[candidates.Count];
+                    var scores = Scores(candidates, item, above, Have, MakersOf);
                     int current = -1, own = -1;
                     long most = 0;
-                    path.Clear();
-                    path.Add(item);
                     for (int i = 0; i < candidates.Count; i++)
                     {
-                        scores[i] = Score(candidates[i], item, id => Obtainable(id, Have, MakersOf, value, path, 1));
                         most = Math.Max(most, scores[i]);
                         if (candidates[i] == proto.handcraft) current = i;
                         if (candidates[i] == original) own = i;
@@ -109,14 +106,31 @@ namespace BasicModPack
                 }
             }
             var chosen = proto.handcraft;
-            if (chosen?.Items != null) foreach (int input in chosen.Items) Visit(input, seen, level + 1);
+            above.Add(item);
+            if (chosen?.Items != null) foreach (int input in chosen.Items) Visit(input, seen, above);
+            above.RemoveAt(above.Count - 1);
+        }
+
+        // Each candidate's score. The items above are made from this one, so a route through them would loop: the game's
+        // planner then fails and the input shows 0 (tar made from hydrogen for hydrogen made from tar). There they count only
+        // what is carried. Results depend on the path, so the memo lives for this one choice.
+        public static long[] Scores(List<RecipeProto> candidates, int item, IEnumerable<int> above, Func<int, long> carried, Func<int, List<RecipeProto>> recipes)
+        {
+            var memo = new Dictionary<int, long>();
+            var onPath = new HashSet<int>(above) { item };
+            var scores = new long[candidates.Count];
+            for (int i = 0; i < candidates.Count; i++) scores[i] = Score(candidates[i], item, id => Obtainable(id, carried, recipes, memo, onPath, 1));
+            return scores;
         }
 
         static long Have(int id) => have.TryGetValue(id, out long n) ? n : 0;
+        // An item already chosen this pass is made by that recipe only: it is the one the game's planner will use.
         static List<RecipeProto> MakersOf(int id)
         {
             var proto = LDB.items.Select(id);
-            return proto == null ? new List<RecipeProto>() : Candidates(id, proto);
+            if (proto == null) return new List<RecipeProto>();
+            if (chosenIn.TryGetValue(id, out int p) && p == pass) return proto.handcraft != null ? new List<RecipeProto> { proto.handcraft } : new List<RecipeProto>();
+            return Candidates(id, proto);
         }
 
         // Items one recipe makes from what its inputs can be had in (whole batches x made per batch).
@@ -124,10 +138,9 @@ namespace BasicModPack
         const long Cap = 1L << 40;
 
         // How many of an item the replicator can get: what is carried plus what its best recipe makes from its own inputs,
-        // made along the way too (enriched bricks from stone dust that is crushed from carried stone). A pure function of
-        // what is carried, so choices cannot feed back into it. Inputs two recipes share count for each, so it overstates;
-        // it only ranks recipes. A recipe cycle or a chain deeper than 8 counts what is carried there; results are kept
-        // per pass (memo), the first walk of a pass decides one that a cycle cut short.
+        // made along the way too (enriched bricks from stone dust that is crushed from carried stone). Inputs two recipes
+        // share count for each, so it overstates; it only ranks recipes. An item on the path (a recipe cycle) or a chain
+        // deeper than 8 counts what is carried there; results are kept in memo, the first walk decides one a cycle cut short.
         public static long Obtainable(int item, Func<int, long> carried, Func<int, List<RecipeProto>> recipes, Dictionary<int, long> memo, HashSet<int> path, int level)
         {
             if (memo.TryGetValue(item, out long known)) return known;
