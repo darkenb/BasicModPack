@@ -1,8 +1,8 @@
 {
     "name": "BUG_BasicModPack",
-    "version_number": "1.1.2",
+    "version_number": "1.2.0",
     "website_url": "https://github.com/darkenb/BasicModPack",
-    "description": "Small quality-of-life features in one in-game panel (EN/TR/ZH): upgrade, refill, refuel, clear ruins, storage limits and loot pickup in range; station templates, warnings, build counter.",
+    "description": "Small quality-of-life features in one in-game panel (EN/TR/ZH): upgrade, refill, refuel, clear ruins, storage limits and loot pickup in range; station templates, auto replenish, control panel copy/paste, warnings, build counter.",
     "dependencies": [
         "xiaoye97-BepInEx-5.4.17"
     ]

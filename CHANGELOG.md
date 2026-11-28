@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0
+
+- New switch **Auto replenish**: the arrow button on drone, vessel and bot slots is on for every logistics station and distributor: new, copied and loaded. Only the planet you are on is filled from your inventory, one building after another.
+- New switch **Distributor item from depot**: a copied distributor placed on a depot that holds items picks its item from the depot instead of keeping the copied one.
+- New switch **Control panel copy/paste**: a copy/paste button on control panel rows of stations, distributors and advanced mining machines copies settings, item slots and filters onto other buildings of the same type, one by one; right click on any of these buttons cancels the copy.
+
 ## 1.1.2
 
 - Best chain recipe: an input could be given a recipe that needs an item made from that input, for example tar from coal and hydrogen while the hydrogen was made from tar. The replicator could then not make the input at all: with GenesisBook, deuterium for plasma capsules showed 0 although it could be made from crude oil. Such loops are no longer chosen.

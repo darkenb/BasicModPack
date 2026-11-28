@@ -6,8 +6,8 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-[assembly: AssemblyVersion("1.1.2.0")]
-[assembly: AssemblyFileVersion("1.1.2.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 namespace BasicModPack
 {
@@ -25,7 +25,7 @@ namespace BasicModPack
         public bool OneTime => Enabled == null;
     }
 
-    [BepInPlugin(Guid, "BUG_BasicModPack", "1.1.2")]
+    [BepInPlugin(Guid, "BUG_BasicModPack", "1.2.0")]
     public class Plugin : BaseUnityPlugin
     {
         public const string Guid = "bug.dsp.basicmodpack";
@@ -72,6 +72,11 @@ namespace BasicModPack
             BeltCounter.Enabled = Switch("Build counter", "Beside the cursor while building: how many you carry, and how many a dragged belt line takes.").Enabled;
             ChainRecipes.Enabled = Switch("Best chain recipe", "When the replicator makes a missing input along the way, it uses the recipe that can make the most of it from your inventory, among every recipe that makes it, other mods' included.").Enabled;
             ChainRecipes.Apply(new HarmonyLib.Harmony(Guid));
+            GameTweaks.AutoReplenish = Switch("Auto replenish", "The arrow button on drone, vessel and bot slots is on for every station and distributor. Only the planet you are on is filled from your inventory, one building after another.").Enabled;
+            GameTweaks.DepotItem = Switch("Distributor item from depot", "A copied distributor placed on a depot that holds items picks its item from the depot instead of keeping the copied one.").Enabled;
+            GameTweaks.PanelCopyPaste = Switch("Control panel copy/paste", "A copy/paste button on control panel rows of stations, distributors and advanced mining machines. Right click cancels the copy.").Enabled;
+            try { GameTweaks.Apply(); }
+            catch (System.Exception e) { Log.LogError("Auto replenish, distributor item and control panel copy/paste could not be patched; the game runs as it is. " + e); }
         }
 
         // A one-time action: Run only.

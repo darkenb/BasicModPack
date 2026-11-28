@@ -101,6 +101,24 @@ namespace BasicModPack
                 "复制器在连锁制造缺少的原料时，从所有能制造该原料的配方（包括其他模组的配方）中，使用用背包物品能制造最多的配方。",
                 "Çoğaltıcı eksik bir malzemeyi zincirle üretirken, onu yapan tüm tarifler arasından (diğer modlarınkiler dahil) envanterinle en çok üretebilen tarifi kullanır.",
             },
+            ["Auto replenish"] = new[] { "自动补充", "Otomatik ikmal" },
+            ["The arrow button on drone, vessel and bot slots is on for every station and distributor. Only the planet you are on is filled from your inventory, one building after another."] = new[]
+            {
+                "所有物流站和配送器的无人机、运输船和配送机槽位上的箭头按钮保持开启。只从背包补充你所在星球上的建筑，逐个进行。",
+                "Tüm istasyon ve dağıtıcılarda dron, gemi ve kurye yuvalarındaki ok düğmesi açık olur. Yalnız bulunduğun gezegendeki binalar, sırayla, envanterinden doldurulur.",
+            },
+            ["Distributor item from depot"] = new[] { "配送器物品取自储物仓", "Dağıtıcı eşyası depodan" },
+            ["A copied distributor placed on a depot that holds items picks its item from the depot instead of keeping the copied one."] = new[]
+            {
+                "复制的配送器放在装有物品的储物仓上时，从储物仓中选取物品，而不是保留复制的物品。",
+                "Eşya bulunan bir deponun üstüne konan kopyalanmış dağıtıcı, kopyalanan eşyayı tutmak yerine eşyasını depodan seçer.",
+            },
+            ["Control panel copy/paste"] = new[] { "控制面板复制/粘贴", "Kontrol panelinde kopyala/yapıştır" },
+            ["A copy/paste button on control panel rows of stations, distributors and advanced mining machines. Right click cancels the copy."] = new[]
+            {
+                "在控制面板中物流站、配送器和大型采矿机的行上添加复制/粘贴按钮。右键取消复制。",
+                "Kontrol panelindeki istasyon, dağıtıcı ve gelişmiş madenci satırlarına kopyala/yapıştır düğmesi. Sağ tık kopyayı iptal eder.",
+            },
 
             // Results and messages
             ["Land on a planet first."] = new[] { "请先登陆星球。", "Önce bir gezegene in." },
